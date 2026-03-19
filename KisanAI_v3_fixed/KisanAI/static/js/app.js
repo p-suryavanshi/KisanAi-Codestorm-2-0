@@ -1,6 +1,73 @@
 // KisanAI v3 — Fixed Frontend (all bugs resolved)
 'use strict';
 let lang = 'en', busy = false, recog = null, isRec = false;
+let chatHistory = []; // stores {role, content} for context
+let weatherTimer = null;
+
+// Debounced weather reload (waits 800ms after user stops typing city)
+function debouncedWeather() {
+  clearTimeout(weatherTimer);
+  weatherTimer = setTimeout(() => {
+    const city = document.getElementById('cityEl')?.value.trim();
+    const hint = document.getElementById('cityHint');
+    if (city && hint) hint.textContent = `Fetching weather for "${city}"...`;
+    loadWeather();
+  }, 800);
+}
+
+// State change — update weather + soil suggestion
+function onStateChange() {
+  autoSuggestSoil();
+  loadWeather();
+  // Also update city placeholder
+  const stateEl = document.getElementById('stateEl');
+  const cityEl = document.getElementById('cityEl');
+  if (cityEl && stateEl) {
+    const stateCities = {
+      'UP':'e.g. Lucknow, Varanasi, Agra, Kanpur...',
+      'MP':'e.g. Indore, Bhopal, Jabalpur, Gwalior...',
+      'MH':'e.g. Pune, Nagpur, Nashik, Aurangabad...',
+      'PB':'e.g. Ludhiana, Amritsar, Patiala, Jalandhar...',
+      'RJ':'e.g. Jaipur, Jodhpur, Udaipur, Kota...',
+      'GJ':'e.g. Ahmedabad, Surat, Rajkot, Vadodara...',
+      'HR':'e.g. Chandigarh, Rohtak, Karnal, Hisar...',
+      'AP':'e.g. Vijayawada, Visakhapatnam, Tirupati, Guntur...',
+      'TN':'e.g. Chennai, Coimbatore, Madurai, Salem...',
+      'KA':'e.g. Bengaluru, Mysuru, Hubballi, Mangaluru...',
+      'WB':'e.g. Kolkata, Siliguri, Durgapur, Asansol...',
+      'BR':'e.g. Patna, Gaya, Bhagalpur, Muzaffarpur...',
+      'KL':'e.g. Thiruvananthapuram, Kochi, Kozhikode, Thrissur...',
+      'TS':'e.g. Hyderabad, Warangal, Nizamabad, Karimnagar...',
+      'OR':'e.g. Bhubaneswar, Cuttack, Rourkela, Berhampur...',
+      'CG':'e.g. Raipur, Bilaspur, Durg, Bhilai...',
+      'JH':'e.g. Ranchi, Jamshedpur, Dhanbad, Bokaro...',
+      'AS':'e.g. Guwahati, Silchar, Dibrugarh, Jorhat...',
+      'DL':'e.g. Delhi, New Delhi, Noida, Faridabad...',
+      'UK':'e.g. Dehradun, Haridwar, Rishikesh, Haldwani...',
+      'HP':'e.g. Shimla, Manali, Dharamshala, Solan...',
+      'JK':'e.g. Srinagar, Jammu, Leh, Anantnag...',
+    };
+    cityEl.placeholder = stateCities[stateEl.value] || 'e.g. your city or district...';
+    cityEl.value = ''; // Clear old city when state changes
+    const hint = document.getElementById('cityHint');
+    if (hint) hint.textContent = 'Type your city for local weather data';
+  }
+}
+
+// Auto-suggest soil type based on state
+function autoSuggestSoil() {
+  const state = document.getElementById('stateEl')?.value;
+  const soilEl = document.getElementById('soilEl');
+  if (!soilEl || !state) return;
+  const stateSoil = {
+    'MP':'black','MH':'black','GJ':'black','TN':'red','KA':'red','AP':'red',
+    'UP':'alluvial','PB':'alluvial','WB':'alluvial','BR':'alluvial','HR':'alluvial',
+    'RJ':'sandy','HR':'loamy','UK':'loamy','HP':'loamy','CG':'red','OR':'red',
+    'TS':'black','KL':'red','AS':'alluvial','JH':'red',
+  };
+  const suggested = stateSoil[state];
+  if (suggested) soilEl.value = suggested;
+}
 
 // ── BOOT ──────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
@@ -9,6 +76,8 @@ window.addEventListener('DOMContentLoaded', () => {
   loadNews();
   loadSchemes();
   animateCounters();
+  // Auto-set soil type suggestion based on state
+  autoSuggestSoil();
   addMsg('ai', '👋 Welcome to **KisanAI v3**!\n\nI can help with:\n🌾 Crop advice for ANY crop (type your own!)\n💧 Irrigation & fertilizer schedules\n🔬 Pest detection via photo upload\n📈 Live mandi prices\n📅 Crop calendar & yield estimates\n\nTell me your crop and problem!');
 });
 
@@ -47,7 +116,23 @@ function toggleCustomCrop(val) {
     document.getElementById('customCropEl').value = '';
     // Reload planner for new crop selection
     if (document.getElementById('panePlanner')?.classList.contains('on')) loadPlanner();
+    // Notify chat about crop change
+    const cropName = val.charAt(0).toUpperCase() + val.slice(1);
+    notifyCropChange(cropName);
   }
+}
+
+// Notify chat when user changes crop in sidebar
+function notifyCropChange(cropName) {
+  const box = document.getElementById('chatBody');
+  if (!box) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'text-align:center;margin:8px 0;';
+  div.innerHTML = `<span style="font-size:11px;color:rgba(250,248,242,.35);background:rgba(255,255,255,.05);padding:4px 12px;border-radius:100px">Profile updated: Crop changed to ${cropName}</span>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  // Clear old context since crop changed
+  chatHistory = [];
 }
 
 // ── COUNTER ANIMATION ─────────────────────────────────────
@@ -387,18 +472,24 @@ async function sendChat() {
   if (sendBtn) sendBtn.disabled = true;
   showTyping();
   const p = getProfile();
+  // Save user message to history
+  chatHistory.push({ role: 'user', content: msg });
+  if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
   try {
     const r = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ message: msg, language: lang, ...p })
+      body: JSON.stringify({ message: msg, language: lang, ...p, history: chatHistory.slice(-6) })
     });
     if (!r.ok) throw new Error(`Server error ${r.status}`);
     const d = await r.json();
     document.getElementById('typEl')?.remove();
-    addMsg('ai', d.reply || 'Sorry, no response received.');
+    const reply = d.reply || 'Sorry, no response received.';
+    addMsg('ai', reply);
+    // Save AI reply to history
+    chatHistory.push({ role: 'assistant', content: reply.substring(0, 200) });
   } catch (e) {
     document.getElementById('typEl')?.remove();
-    addMsg('ai', `⚠️ **Connection error**\n\n${e.message}\n\nMake sure the server is running: \`python main.py\``);
+    addMsg('ai', `Connection error: ${e.message}\n\nMake sure the server is running: python main.py`);
   }
   busy = false;
   if (sendBtn) sendBtn.disabled = false;

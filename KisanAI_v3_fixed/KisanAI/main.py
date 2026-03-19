@@ -34,6 +34,7 @@ class ChatReq(BaseModel):
     land: float = 2.5
     city: str = ""
     save_history: bool = True
+    history: list = []   # [{role, content}] last N messages for context
 
 class SoilReq(BaseModel):
     crop: str = "wheat"
@@ -98,20 +99,38 @@ ALL_STATES = {
 
 # ── Weather Data (all states) ──────────────────────────────
 WEATHER_DATA = {
-    "MP":  {"temp":28,"feels":31,"desc":"Partly Cloudy","humidity":68,"wind":12,"rain":20,"uv":"High","alert":"Low rainfall expected. Irrigate wheat within 3 days.","forecast":[{"day":"Today","icon":"⛅","high":28,"low":19},{"day":"Thu","icon":"☀️","high":30,"low":20},{"day":"Fri","icon":"🌧️","high":24,"low":17},{"day":"Sat","icon":"⛅","high":26,"low":18},{"day":"Sun","icon":"☀️","high":29,"low":21}]},
+    # Major agricultural states — full data
+    "MP":  {"temp":28,"feels":31,"desc":"Partly Cloudy","humidity":68,"wind":12,"rain":20,"uv":"High","alert":"Low rainfall. Irrigate wheat within 3 days.","forecast":[{"day":"Today","icon":"⛅","high":28,"low":19},{"day":"Thu","icon":"☀️","high":30,"low":20},{"day":"Fri","icon":"🌧️","high":24,"low":17},{"day":"Sat","icon":"⛅","high":26,"low":18},{"day":"Sun","icon":"☀️","high":29,"low":21}]},
     "UP":  {"temp":26,"feels":28,"desc":"Foggy","humidity":82,"wind":8,"rain":35,"uv":"Low","alert":"Dense fog advisory. Delay spraying operations.","forecast":[{"day":"Today","icon":"🌫️","high":26,"low":15},{"day":"Thu","icon":"🌫️","high":25,"low":14},{"day":"Fri","icon":"⛅","high":27,"low":16},{"day":"Sat","icon":"☀️","high":28,"low":17},{"day":"Sun","icon":"⛅","high":26,"low":15}]},
     "MH":  {"temp":32,"feels":36,"desc":"Hot & Dry","humidity":45,"wind":18,"rain":5,"uv":"Very High","alert":"Heat wave possible. Irrigate morning or evening only.","forecast":[{"day":"Today","icon":"☀️","high":32,"low":22},{"day":"Thu","icon":"☀️","high":34,"low":23},{"day":"Fri","icon":"☀️","high":33,"low":22},{"day":"Sat","icon":"⛅","high":30,"low":20},{"day":"Sun","icon":"🌧️","high":27,"low":19}]},
-    "PB":  {"temp":22,"feels":23,"desc":"Clear","humidity":55,"wind":10,"rain":10,"uv":"Moderate","alert":"Good conditions for pesticide spraying today.","forecast":[{"day":"Today","icon":"🌤️","high":22,"low":12},{"day":"Thu","icon":"☀️","high":24,"low":13},{"day":"Fri","icon":"☀️","high":25,"low":14},{"day":"Sat","icon":"⛅","high":22,"low":12},{"day":"Sun","icon":"🌤️","high":21,"low":11}]},
+    "PB":  {"temp":22,"feels":23,"desc":"Clear & Cool","humidity":55,"wind":10,"rain":10,"uv":"Moderate","alert":"Good conditions for spraying today. Ideal for wheat.","forecast":[{"day":"Today","icon":"🌤️","high":22,"low":10},{"day":"Thu","icon":"☀️","high":24,"low":11},{"day":"Fri","icon":"☀️","high":25,"low":12},{"day":"Sat","icon":"⛅","high":22,"low":10},{"day":"Sun","icon":"🌤️","high":21,"low":9}]},
     "RJ":  {"temp":35,"feels":40,"desc":"Sunny & Hot","humidity":30,"wind":22,"rain":2,"uv":"Extreme","alert":"Extreme heat. Avoid field work 11 AM – 4 PM.","forecast":[{"day":"Today","icon":"🌞","high":35,"low":22},{"day":"Thu","icon":"🌞","high":37,"low":23},{"day":"Fri","icon":"☀️","high":36,"low":22},{"day":"Sat","icon":"⛅","high":32,"low":20},{"day":"Sun","icon":"☀️","high":34,"low":21}]},
-    "GJ":  {"temp":30,"feels":33,"desc":"Warm","humidity":58,"wind":15,"rain":12,"uv":"High","alert":"Cotton — watch for pink bollworm this week.","forecast":[{"day":"Today","icon":"🌤️","high":30,"low":20},{"day":"Thu","icon":"☀️","high":32,"low":21},{"day":"Fri","icon":"⛅","high":29,"low":19},{"day":"Sat","icon":"🌧️","high":26,"low":18},{"day":"Sun","icon":"⛅","high":28,"low":19}]},
-    "HR":  {"temp":24,"feels":25,"desc":"Pleasant","humidity":60,"wind":12,"rain":15,"uv":"Moderate","alert":"Good wheat growing conditions. Monitor for rust.","forecast":[{"day":"Today","icon":"🌤️","high":24,"low":13},{"day":"Thu","icon":"☀️","high":26,"low":14},{"day":"Fri","icon":"⛅","high":23,"low":12},{"day":"Sat","icon":"🌧️","high":20,"low":11},{"day":"Sun","icon":"⛅","high":22,"low":12}]},
+    "GJ":  {"temp":30,"feels":33,"desc":"Warm & Sunny","humidity":58,"wind":15,"rain":12,"uv":"High","alert":"Cotton — monitor for pink bollworm this week.","forecast":[{"day":"Today","icon":"🌤️","high":30,"low":20},{"day":"Thu","icon":"☀️","high":32,"low":21},{"day":"Fri","icon":"⛅","high":29,"low":19},{"day":"Sat","icon":"🌧️","high":26,"low":18},{"day":"Sun","icon":"⛅","high":28,"low":19}]},
+    "HR":  {"temp":24,"feels":25,"desc":"Pleasant","humidity":60,"wind":12,"rain":15,"uv":"Moderate","alert":"Good wheat conditions. Monitor for yellow rust.","forecast":[{"day":"Today","icon":"🌤️","high":24,"low":12},{"day":"Thu","icon":"☀️","high":26,"low":13},{"day":"Fri","icon":"⛅","high":23,"low":11},{"day":"Sat","icon":"🌧️","high":20,"low":10},{"day":"Sun","icon":"⛅","high":22,"low":11}]},
     "AP":  {"temp":34,"feels":38,"desc":"Humid","humidity":75,"wind":14,"rain":40,"uv":"High","alert":"Rain expected. Pause fertilizer application.","forecast":[{"day":"Today","icon":"🌦️","high":34,"low":24},{"day":"Thu","icon":"🌧️","high":30,"low":22},{"day":"Fri","icon":"🌧️","high":28,"low":21},{"day":"Sat","icon":"⛅","high":31,"low":22},{"day":"Sun","icon":"🌤️","high":33,"low":23}]},
-    "TN":  {"temp":33,"feels":37,"desc":"Hot & Humid","humidity":72,"wind":16,"rain":30,"uv":"High","alert":"High humidity — watch for fungal diseases in rice.","forecast":[{"day":"Today","icon":"🌦️","high":33,"low":24},{"day":"Thu","icon":"🌧️","high":30,"low":23},{"day":"Fri","icon":"⛅","high":31,"low":23},{"day":"Sat","icon":"🌤️","high":32,"low":24},{"day":"Sun","icon":"☀️","high":34,"low":25}]},
-    "KA":  {"temp":29,"feels":32,"desc":"Partly Cloudy","humidity":62,"wind":13,"rain":25,"uv":"High","alert":"Good spray window this morning.","forecast":[{"day":"Today","icon":"⛅","high":29,"low":20},{"day":"Thu","icon":"⛅","high":30,"low":21},{"day":"Fri","icon":"🌧️","high":27,"low":19},{"day":"Sat","icon":"⛅","high":28,"low":20},{"day":"Sun","icon":"☀️","high":31,"low":21}]},
-    "WB":  {"temp":27,"feels":30,"desc":"Cloudy","humidity":78,"wind":11,"rain":45,"uv":"Low","alert":"Rain likely — avoid field operations today.","forecast":[{"day":"Today","icon":"🌧️","high":27,"low":20},{"day":"Thu","icon":"🌧️","high":26,"low":19},{"day":"Fri","icon":"⛅","high":28,"low":20},{"day":"Sat","icon":"☀️","high":30,"low":21},{"day":"Sun","icon":"⛅","high":29,"low":20}]},
-    "BR":  {"temp":25,"feels":27,"desc":"Hazy","humidity":70,"wind":9,"rain":20,"uv":"Moderate","alert":"Moderate fog in morning. Scout for stem borer.","forecast":[{"day":"Today","icon":"🌫️","high":25,"low":14},{"day":"Thu","icon":"⛅","high":26,"low":15},{"day":"Fri","icon":"☀️","high":28,"low":16},{"day":"Sat","icon":"☀️","high":27,"low":15},{"day":"Sun","icon":"⛅","high":25,"low":14}]},
-    "KL":  {"temp":31,"feels":36,"desc":"Hot & Humid","humidity":85,"wind":18,"rain":50,"uv":"High","alert":"Heavy rain alert. Drain waterlogged fields.","forecast":[{"day":"Today","icon":"🌧️","high":31,"low":24},{"day":"Thu","icon":"🌧️","high":29,"low":23},{"day":"Fri","icon":"🌧️","high":28,"low":23},{"day":"Sat","icon":"⛅","high":30,"low":24},{"day":"Sun","icon":"🌤️","high":32,"low":24}]},
+    "TN":  {"temp":33,"feels":37,"desc":"Hot & Humid","humidity":72,"wind":16,"rain":30,"uv":"High","alert":"High humidity. Watch for fungal diseases in rice.","forecast":[{"day":"Today","icon":"🌦️","high":33,"low":24},{"day":"Thu","icon":"🌧️","high":30,"low":23},{"day":"Fri","icon":"⛅","high":31,"low":23},{"day":"Sat","icon":"🌤️","high":32,"low":24},{"day":"Sun","icon":"☀️","high":34,"low":25}]},
+    "KA":  {"temp":29,"feels":32,"desc":"Partly Cloudy","humidity":62,"wind":13,"rain":25,"uv":"High","alert":"Good spray window this morning.","forecast":[{"day":"Today","icon":"⛅","high":29,"low":19},{"day":"Thu","icon":"⛅","high":30,"low":20},{"day":"Fri","icon":"🌧️","high":27,"low":18},{"day":"Sat","icon":"⛅","high":28,"low":19},{"day":"Sun","icon":"☀️","high":31,"low":20}]},
+    "WB":  {"temp":27,"feels":30,"desc":"Cloudy","humidity":78,"wind":11,"rain":45,"uv":"Low","alert":"Rain likely today. Avoid field operations.","forecast":[{"day":"Today","icon":"🌧️","high":27,"low":20},{"day":"Thu","icon":"🌧️","high":26,"low":19},{"day":"Fri","icon":"⛅","high":28,"low":20},{"day":"Sat","icon":"☀️","high":30,"low":21},{"day":"Sun","icon":"⛅","high":29,"low":20}]},
+    "BR":  {"temp":25,"feels":27,"desc":"Hazy","humidity":70,"wind":9,"rain":20,"uv":"Moderate","alert":"Moderate fog in morning. Scout for stem borer.","forecast":[{"day":"Today","icon":"🌫️","high":25,"low":13},{"day":"Thu","icon":"⛅","high":26,"low":14},{"day":"Fri","icon":"☀️","high":28,"low":15},{"day":"Sat","icon":"☀️","high":27,"low":14},{"day":"Sun","icon":"⛅","high":25,"low":13}]},
+    "KL":  {"temp":31,"feels":36,"desc":"Hot & Humid","humidity":85,"wind":18,"rain":50,"uv":"High","alert":"Heavy rain alert. Drain waterlogged fields immediately.","forecast":[{"day":"Today","icon":"🌧️","high":31,"low":24},{"day":"Thu","icon":"🌧️","high":29,"low":23},{"day":"Fri","icon":"🌧️","high":28,"low":23},{"day":"Sat","icon":"⛅","high":30,"low":24},{"day":"Sun","icon":"🌤️","high":32,"low":24}]},
     "TS":  {"temp":33,"feels":37,"desc":"Sunny","humidity":50,"wind":15,"rain":8,"uv":"Very High","alert":"High UV today. Avoid field work 11 AM–3 PM.","forecast":[{"day":"Today","icon":"☀️","high":33,"low":22},{"day":"Thu","icon":"☀️","high":35,"low":23},{"day":"Fri","icon":"⛅","high":32,"low":22},{"day":"Sat","icon":"🌧️","high":28,"low":20},{"day":"Sun","icon":"⛅","high":30,"low":21}]},
+    "OR":  {"temp":29,"feels":33,"desc":"Partly Cloudy","humidity":70,"wind":14,"rain":30,"uv":"High","alert":"Rain likely mid-week. Complete spraying today.","forecast":[{"day":"Today","icon":"⛅","high":29,"low":20},{"day":"Thu","icon":"⛅","high":30,"low":21},{"day":"Fri","icon":"🌧️","high":26,"low":19},{"day":"Sat","icon":"🌧️","high":25,"low":18},{"day":"Sun","icon":"⛅","high":28,"low":19}]},
+    "AS":  {"temp":24,"feels":26,"desc":"Cloudy","humidity":80,"wind":10,"rain":40,"uv":"Low","alert":"High moisture. Watch for blast disease in rice.","forecast":[{"day":"Today","icon":"🌧️","high":24,"low":16},{"day":"Thu","icon":"⛅","high":25,"low":17},{"day":"Fri","icon":"🌧️","high":22,"low":15},{"day":"Sat","icon":"⛅","high":24,"low":16},{"day":"Sun","icon":"☀️","high":26,"low":17}]},
+    "JH":  {"temp":27,"feels":29,"desc":"Clear","humidity":65,"wind":11,"rain":15,"uv":"Moderate","alert":"Good conditions. Ideal for basal fertilizer application.","forecast":[{"day":"Today","icon":"🌤️","high":27,"low":16},{"day":"Thu","icon":"☀️","high":29,"low":17},{"day":"Fri","icon":"☀️","high":30,"low":18},{"day":"Sat","icon":"⛅","high":27,"low":16},{"day":"Sun","icon":"🌤️","high":26,"low":15}]},
+    "CG":  {"temp":29,"feels":32,"desc":"Warm & Humid","humidity":68,"wind":12,"rain":25,"uv":"High","alert":"Moderate conditions. Good for soybean growth.","forecast":[{"day":"Today","icon":"⛅","high":29,"low":19},{"day":"Thu","icon":"☀️","high":31,"low":20},{"day":"Fri","icon":"⛅","high":28,"low":18},{"day":"Sat","icon":"🌧️","high":25,"low":17},{"day":"Sun","icon":"⛅","high":27,"low":18}]},
+    "UK":  {"temp":18,"feels":16,"desc":"Cool & Cloudy","humidity":72,"wind":14,"rain":25,"uv":"Low","alert":"Cool temperatures. Protect crops from frost at night.","forecast":[{"day":"Today","icon":"⛅","high":18,"low":8},{"day":"Thu","icon":"🌧️","high":15,"low":6},{"day":"Fri","icon":"⛅","high":17,"low":7},{"day":"Sat","icon":"☀️","high":20,"low":9},{"day":"Sun","icon":"⛅","high":19,"low":8}]},
+    "HP":  {"temp":14,"feels":11,"desc":"Cold & Cloudy","humidity":65,"wind":16,"rain":30,"uv":"Low","alert":"Sub-zero temperatures at night. Cover vegetable crops.","forecast":[{"day":"Today","icon":"⛅","high":14,"low":2},{"day":"Thu","icon":"🌨️","high":10,"low":-1},{"day":"Fri","icon":"⛅","high":12,"low":1},{"day":"Sat","icon":"☀️","high":16,"low":3},{"day":"Sun","icon":"⛅","high":15,"low":2}]},
+    "DL":  {"temp":26,"feels":28,"desc":"Hazy","humidity":58,"wind":8,"rain":10,"uv":"Moderate","alert":"Air quality poor. Avoid burning crop residue.","forecast":[{"day":"Today","icon":"🌫️","high":26,"low":14},{"day":"Thu","icon":"⛅","high":28,"low":15},{"day":"Fri","icon":"☀️","high":30,"low":16},{"day":"Sat","icon":"☀️","high":29,"low":15},{"day":"Sun","icon":"⛅","high":27,"low":14}]},
+    "JK":  {"temp":12,"feels":9,"desc":"Cold & Windy","humidity":60,"wind":20,"rain":20,"uv":"Low","alert":"Cold wave. Protect apple orchards and saffron crops.","forecast":[{"day":"Today","icon":"🌨️","high":12,"low":0},{"day":"Thu","icon":"❄️","high":8,"low":-3},{"day":"Fri","icon":"⛅","high":11,"low":-1},{"day":"Sat","icon":"☀️","high":14,"low":1},{"day":"Sun","icon":"⛅","high":13,"low":0}]},
+    "GA":  {"temp":31,"feels":35,"desc":"Hot & Humid","humidity":80,"wind":15,"rain":35,"uv":"High","alert":"High humidity. Ideal for cashew and coconut but watch for fungal disease.","forecast":[{"day":"Today","icon":"🌦️","high":31,"low":23},{"day":"Thu","icon":"🌧️","high":29,"low":22},{"day":"Fri","icon":"⛅","high":30,"low":23},{"day":"Sat","icon":"🌤️","high":32,"low":24},{"day":"Sun","icon":"☀️","high":33,"low":24}]},
+    "MN":  {"temp":22,"feels":20,"desc":"Cool & Cloudy","humidity":75,"wind":10,"rain":30,"uv":"Low","alert":"Rain expected. Good for rice but delay pesticide spray.","forecast":[{"day":"Today","icon":"🌧️","high":22,"low":13},{"day":"Thu","icon":"⛅","high":23,"low":14},{"day":"Fri","icon":"☀️","high":25,"low":15},{"day":"Sat","icon":"⛅","high":24,"low":14},{"day":"Sun","icon":"🌤️","high":23,"low":13}]},
+    "MZ":  {"temp":20,"feels":18,"desc":"Cool & Rainy","humidity":82,"wind":8,"rain":45,"uv":"Low","alert":"High rainfall region. Ensure good drainage in terrace farms.","forecast":[{"day":"Today","icon":"🌧️","high":20,"low":12},{"day":"Thu","icon":"🌧️","high":18,"low":11},{"day":"Fri","icon":"⛅","high":20,"low":12},{"day":"Sat","icon":"🌤️","high":22,"low":13},{"day":"Sun","icon":"⛅","high":21,"low":12}]},
+    "NL":  {"temp":19,"feels":17,"desc":"Cool & Misty","humidity":78,"wind":9,"rain":35,"uv":"Low","alert":"Mist in morning. Good for tea and vegetable cultivation.","forecast":[{"day":"Today","icon":"🌫️","high":19,"low":11},{"day":"Thu","icon":"⛅","high":20,"low":12},{"day":"Fri","icon":"🌧️","high":17,"low":10},{"day":"Sat","icon":"⛅","high":19,"low":11},{"day":"Sun","icon":"☀️","high":21,"low":12}]},
+    "TR":  {"temp":26,"feels":28,"desc":"Warm & Cloudy","humidity":76,"wind":11,"rain":35,"uv":"Moderate","alert":"Good conditions for rubber and tea. Watch for leaf blight.","forecast":[{"day":"Today","icon":"⛅","high":26,"low":18},{"day":"Thu","icon":"🌧️","high":24,"low":17},{"day":"Fri","icon":"⛅","high":25,"low":17},{"day":"Sat","icon":"🌤️","high":27,"low":18},{"day":"Sun","icon":"☀️","high":28,"low":19}]},
+    "SK":  {"temp":15,"feels":12,"desc":"Cool & Clear","humidity":68,"wind":12,"rain":20,"uv":"Moderate","alert":"Good for cardamom and ginger cultivation. No frost risk today.","forecast":[{"day":"Today","icon":"🌤️","high":15,"low":5},{"day":"Thu","icon":"☀️","high":17,"low":6},{"day":"Fri","icon":"⛅","high":14,"low":4},{"day":"Sat","icon":"🌧️","high":12,"low":3},{"day":"Sun","icon":"⛅","high":14,"low":5}]},
+    "AR":  {"temp":18,"feels":15,"desc":"Cool & Cloudy","humidity":80,"wind":8,"rain":40,"uv":"Low","alert":"High rainfall area. Monitor for waterlogging in paddy fields.","forecast":[{"day":"Today","icon":"🌧️","high":18,"low":10},{"day":"Thu","icon":"🌧️","high":16,"low":9},{"day":"Fri","icon":"⛅","high":18,"low":10},{"day":"Sat","icon":"🌤️","high":20,"low":11},{"day":"Sun","icon":"⛅","high":19,"low":10}]},
+    "ML":  {"temp":21,"feels":19,"desc":"Cool & Wet","humidity":84,"wind":9,"rain":50,"uv":"Low","alert":"Cherrapunji region: very high rainfall. Excellent for orange and ginger.","forecast":[{"day":"Today","icon":"🌧️","high":21,"low":13},{"day":"Thu","icon":"🌧️","high":19,"low":12},{"day":"Fri","icon":"⛅","high":21,"low":13},{"day":"Sat","icon":"🌤️","high":23,"low":14},{"day":"Sun","icon":"⛅","high":22,"low":13}]},
+
 }
 # Default for states without specific data
 DEFAULT_WEATHER = {"temp":28,"feels":31,"desc":"Partly Cloudy","humidity":65,"wind":12,"rain":20,"uv":"Moderate","alert":"Monitor crops regularly. Check for pest activity.","forecast":[{"day":"Today","icon":"⛅","high":28,"low":18},{"day":"Thu","icon":"☀️","high":30,"low":19},{"day":"Fri","icon":"⛅","high":27,"low":17},{"day":"Sat","icon":"🌧️","high":24,"low":16},{"day":"Sun","icon":"☀️","high":29,"low":18}]}
@@ -257,21 +276,308 @@ def make_demo_response(req: ChatReq, key: str) -> str:
     lang_key = "hi" if is_hi else "en"
     return responses.get(key, responses["default"])[lang_key]
 
+# ── All known crop names for message detection ────────────
+CROP_NAME_MAP = {
+    "wheat":"wheat","gehu":"wheat","gehun":"wheat",
+    "rice":"rice","paddy":"rice","dhan":"rice",
+    "soybean":"soybean","soya":"soybean","soyabean":"soybean",
+    "cotton":"cotton","kapas":"cotton",
+    "sugarcane":"sugarcane","ganna":"sugarcane","ikh":"sugarcane",
+    "maize":"maize","corn":"maize","makka":"maize","bhutta":"maize",
+    "mustard":"mustard","sarson":"mustard","rapeseed":"mustard",
+    "onion":"onion","pyaz":"onion","kanda":"onion",
+    "gram":"gram","chana":"gram","chickpea":"gram",
+    "tomato":"tomato","tamatar":"tomato",
+    "potato":"potato","aloo":"potato","aaloo":"potato",
+    "groundnut":"groundnut","peanut":"groundnut","moongfali":"groundnut",
+    "mango":"mango","aam":"mango",
+    "banana":"banana","kela":"banana",
+    "guava":"guava","amrood":"guava",
+    "turmeric":"turmeric","haldi":"turmeric",
+    "ginger":"ginger","adrak":"ginger",
+    "garlic":"garlic","lahsun":"garlic",
+    "chilli":"chilli","mirch":"chilli",
+    "brinjal":"brinjal","baingan":"brinjal",
+    "cauliflower":"cauliflower","gobhi":"cauliflower",
+    "peas":"peas","matar":"peas",
+    "jowar":"jowar","sorghum":"jowar",
+    "bajra":"bajra","pearl millet":"bajra",
+    "arhar":"arhar","tur":"arhar","toor":"arhar",
+    "moong":"moong","green gram":"moong",
+    "urad":"urad","black gram":"urad",
+    "sunflower":"sunflower","surajmukhi":"sunflower",
+    "lemon":"lemon","nimbu":"lemon",
+    "cabbage":"cabbage","band gobhi":"cabbage",
+}
+
+def detect_crop_in_msg(msg: str):
+    m = msg.lower().strip()
+    for phrase in sorted(CROP_NAME_MAP.keys(), key=len, reverse=True):
+        if phrase in m:
+            return CROP_NAME_MAP[phrase]
+    return None
+
+def detect_profile_change(msg: str) -> dict:
+    m = msg.lower()
+    result = {}
+    change_words = [
+        "changed","change","switched","switch","updated","update",
+        "select","selected","chose","choose","now using","growing",
+        "planting","sowing","badal","badla","ab mera","maine"
+    ]
+    is_change = any(w in m for w in change_words)
+    detected = detect_crop_in_msg(msg)
+    if detected:
+        result["crop"] = detected
+        result["is_change"] = is_change
+    return result
+
 def get_demo_reply(req: ChatReq) -> str:
-    m = req.message.lower()
-    if any(w in m for w in ["yellow","पीले","colour","color","pale","पीला","wilting"]):
+    m = req.message.strip().lower()
+    msg_orig = req.message.strip()
+    crop = req.crop.title()
+    state = ALL_STATES.get(req.state.upper(), {}).get("name", req.state)
+    is_hi = req.language == "hi"
+
+    # 0. Detect crop mention or profile change
+    change_info = detect_profile_change(msg_orig)
+    if change_info.get("crop"):
+        actual_crop = change_info["crop"]
+        new_crop = actual_crop.title()
+        cal = CROP_CALENDAR.get(actual_crop, {})
+        npk = NPK_TABLE.get(actual_crop, {"N":100,"P":50,"K":40})
+        water_total = WATER_REQ.get(actual_crop, {}).get("total", 500)
+        action_hi = "चुनी" if change_info.get("is_change") else "का जिक्र किया"
+        action_en = "changed to" if change_info.get("is_change") else "mentioned"
+        if is_hi:
+            return (
+                f"OK! {new_crop} {action_hi}.\n\n"
+                f"**{new_crop} की जानकारी:**\n"
+                f"• बुवाई: {cal.get('sow','N/A')}\n"
+                f"• कटाई: {cal.get('harvest','N/A')}\n"
+                f"• खाद: N={npk['N']}, P={npk['P']}, K={npk['K']} kg/ha\n"
+                f"• पानी: {water_total} mm/season\n\n"
+                f"Tip: Sidebar में Crop dropdown से {new_crop} select करें - advice update होगी!"
+            )
+        return (
+            f"Got it! You {action_en} **{new_crop}**.\n\n"
+            f"**Quick info for {new_crop}:**\n"
+            f"• Sowing: {cal.get('sow', 'Varies by region')}\n"
+            f"• Harvest: {cal.get('harvest', 'N/A')}\n"
+            f"• Fertilizer: N={npk['N']}, P={npk['P']}, K={npk['K']} kg/ha\n"
+            f"• Water need: {water_total} mm/season\n\n"
+            f"Tip: Select **{new_crop}** in the Crop dropdown on the left sidebar - all advice will update!"
+        )
+
+    # 1. Greetings
+    greet_words = ["hello","hi","hey","helo","hii","hlo","namaste","namaskar",
+                   "good morning","good evening","good afternoon","subah","salam","hy"]
+    if any(w in m for w in greet_words) and len(m.split()) <= 5:
+        if is_hi:
+            return (
+                f"Namaste! Main KisanAI hun - aapka AI krishi salaahkaar.\n\n"
+                f"Aapka profile:\n"
+                f"• Fasal: {crop}\n"
+                f"• Rajya: {state}\n"
+                f"• Mitti: {req.soil.title()} - {req.land} acre\n\n"
+                f"Aaj main kya madad kar sakta hun?\n"
+                f"- Sinchai kab karen?\n"
+                f"- Kaun si khad dalen?\n"
+                f"- Keeton ka control?\n"
+                f"- Aaj ka mandi bhav?"
+            )
+        return (
+            f"Hello! I'm KisanAI - your AI farming advisor.\n\n"
+            f"Your profile is loaded:\n"
+            f"• Crop: **{crop}**\n"
+            f"• State: **{state}**\n"
+            f"• Soil: **{req.soil.title()}** - {req.land} acres\n\n"
+            f"How can I help you today?\n"
+            f"• When to irrigate?\n"
+            f"• Best fertilizer for {crop}?\n"
+            f"• Pest & disease control?\n"
+            f"• Today's market price?"
+        )
+
+    # 2. How are you
+    howru = ["how are you","how r u","kaisa","kaise ho","kya haal",
+             "you doing","what's up","wassup"]
+    if any(w in m for w in howru):
+        if is_hi:
+            return f"Main bilkul theek hun, shukriya! Aapki {crop} fasal kaisi hai? Koi samasya ho to batayein!"
+        return f"I'm great, thanks for asking! How is your **{crop}** crop doing? Any issues I can help with?"
+
+    # 3. Features / what can you do
+    feature_words = ["what can you do","help me","what do you do","features",
+                     "who are you","what are you","about you","capabilities"]
+    if any(w in m for w in feature_words):
+        if is_hi:
+            return (
+                "Main KisanAI hun - aapka smart krishi salaahkaar!\n\n"
+                "Main yeh kar sakta hun:\n"
+                "- Kisi bhi fasal ke baare mein sawaal\n"
+                "- Photo se keeton ki pehchaan (Pest AI tab)\n"
+                "- Aaj ke mandi bhav (Market tab)\n"
+                "- Buvai calendar + upaj anumaan (Planner tab)\n"
+                "- NPK aur pH salaah (Soil tab)\n"
+                "- Sahee sinchai ganana (Water tab)\n"
+                "- Krishi samaachaar (News tab)\n\n"
+                "Hindi aur English dono mein baat kar sakte hain!"
+            )
+        return (
+            "I'm KisanAI - your complete AI farming advisor!\n\n"
+            "What I can do:\n"
+            "• Answer questions about any crop\n"
+            "• Identify pests from photos (Pest AI tab)\n"
+            "• Live mandi prices (Market tab)\n"
+            "• Sowing calendar + yield estimate (Planner tab)\n"
+            "• NPK & soil health (Soil tab)\n"
+            "• Precision irrigation calc (Water tab)\n"
+            "• Agriculture news (News tab)\n\n"
+            "Just ask me anything in Hindi or English!"
+        )
+
+    # 4. Thank you
+    thanks = ["thank you","thanks","thankyou","dhanyavad","shukriya",
+              "great answer","helpful","bahut badiya","zabardast","awesome"]
+    if any(w in m for w in thanks) and len(m.split()) <= 6:
+        if is_hi:
+            return f"Shukriya! Khushi hai ki main madad kar saka. {crop} ke baare mein aur kuch puchna ho to puchein!"
+        return f"You're welcome! Happy I could help. Feel free to ask anything else about your **{crop}** crop anytime!"
+
+    # 5. OK / Yes / No short replies
+    short_yn = {"yes","no","ok","okay","haan","nahi","theek","sure","hmm","hm","accha","achha","alright","got it"}
+    if m.strip() in short_yn:
+        if is_hi:
+            return f"Theek hai! {crop} fasal ke baare mein aur kuch puchein - sinchai, khad, keet ya bazar."
+        return f"Got it! Feel free to ask anything about your **{crop}** crop - irrigation, fertilizer, pests, or market."
+
+    # 6. Who made you
+    made_words = ["who made","who created","kisne banaya","developed","about kisanai","what is kisanai"]
+    if any(w in m for w in made_words):
+        if is_hi:
+            return "KisanAI ek AI-powered krishi platform hai.\nTech: FastAPI + OpenAI GPT-4 + Python\n30 rajya, 50+ faslen, Hindi + English\nPS3 Hackathon 2026 Submission"
+        return "KisanAI is an AI-powered agricultural advisory platform.\nTech: FastAPI + OpenAI GPT-4 + Python\n30 States - 50+ Crops - Hindi + English\nPS3 Hackathon 2026 Submission"
+
+    # 7. Yield / income
+    yield_words = ["yield","production","kitna","how much","output","income","kamai","profit","benefit","fayda"]
+    if any(w in m for w in yield_words):
+        base = YIELD_TABLE.get(req.crop.lower(), 20)
+        price = next((i["price"] for i in MARKET_DATA if i["crop"].lower() == req.crop.lower()), 2300)
+        if is_hi:
+            return (
+                f"{crop} ki upaj aur aamdani ({state}):\n\n"
+                f"• Aussat upaj: {base}-{int(base*1.15)} quintal/acre\n"
+                f"• {req.land} acre ke liye: {round(base*req.land)}-{round(base*1.15*req.land)} quintal\n"
+                f"• Bazar bhav: Rs.{price:,}/quintal\n"
+                f"• Anumaanik aamdani: Rs.{int(base*req.land*price):,}-Rs.{int(base*1.15*req.land*price):,}\n\n"
+                f"Achhi khad aur sinchai se upaj 20% badh sakti hai!"
+            )
+        return (
+            f"{crop} Yield & Income ({state}):\n\n"
+            f"• Average yield: {base}-{int(base*1.15)} q/acre\n"
+            f"• For your {req.land} acres: {round(base*req.land)}-{round(base*1.15*req.land)} quintals\n"
+            f"• Market rate: Rs.{price:,}/quintal\n"
+            f"• Estimated income: Rs.{int(base*req.land*price):,}-Rs.{int(base*1.15*req.land*price):,}\n\n"
+            f"Good fertilizer + irrigation can increase yield by 20%!"
+        )
+
+    # 8. Weather
+    weather_words = ["weather","rain","rainfall","mausam","temperature","garmi","sardi","flood","drought","barish"]
+    if any(w in m for w in weather_words):
+        w_data = WEATHER_DATA.get(req.state.upper(), DEFAULT_WEATHER)
+        if is_hi:
+            return (
+                f"{state} ka mausam (sidebar mein dekhen):\n\n"
+                f"• Taapman: {w_data['temp']}C - Humidity: {w_data['humidity']}%\n"
+                f"• Alert: {w_data['alert']}\n\n"
+                f"{crop} ke liye tips:\n"
+                f"• Baarish se pehle: chidkav band karen\n"
+                f"• Garmee mein: subah 5-7 baje sinchai karen\n"
+                f"• Paaala: halki sinchai se bachaav"
+            )
+        return (
+            f"Weather in {state} (check sidebar):\n\n"
+            f"• Temp: {w_data['temp']}C - Humidity: {w_data['humidity']}%\n"
+            f"• Alert: {w_data['alert']}\n\n"
+            f"Weather tips for {crop}:\n"
+            f"• Before rain: Stop spraying operations\n"
+            f"• High heat: Irrigate 5-7 AM only\n"
+            f"• Frost risk: Light irrigation protects crop"
+        )
+
+    # 9. Unknown crop mentioned (different from selected)
+    mentioned_crop = detect_crop_in_msg(msg_orig)
+    if mentioned_crop and mentioned_crop != req.crop.lower():
+        new_c = mentioned_crop.title()
+        cal = CROP_CALENDAR.get(mentioned_crop, {})
+        npk = NPK_TABLE.get(mentioned_crop, {"N":100,"P":50,"K":40})
+        if is_hi:
+            return (
+                f"{new_c} ke baare mein puchh rahe hain!\n\n"
+                f"• Buvai: {cal.get('sow','N/A')}\n"
+                f"• Katai: {cal.get('harvest','N/A')}\n"
+                f"• Khad: N={npk['N']}, P={npk['P']}, K={npk['K']} kg/ha\n\n"
+                f"Tip: Sidebar mein Crop dropdown se {new_c} select karen - sab advice update hogi!"
+            )
+        return (
+            f"I see you're asking about **{new_c}**!\n\n"
+            f"• Sowing: {cal.get('sow', 'Varies by region')}\n"
+            f"• Harvest: {cal.get('harvest', 'N/A')}\n"
+            f"• Fertilizer: N={npk['N']}, P={npk['P']}, K={npk['K']} kg/ha\n\n"
+            f"Tip: Select **{new_c}** in the Crop dropdown on the left - all advice will update!"
+        )
+
+    # 10. Farming topics
+    if any(w in m for w in ["yellow","pale","wilting","drying","leaves","colour","color"]):
         return make_demo_response(req, "yellow")
-    if any(w in m for w in ["irrigat","water","सिंचाई","पानी","drip","sprinkler","बारिश"]):
+    if any(w in m for w in ["irrigat","water","sinchai","pump","drip","nali","canal","tubewell"]):
         return make_demo_response(req, "irrigat")
-    if any(w in m for w in ["fertil","urea","खाद","उर्वरक","dap","npk","manure","compost","nutrient"]):
+    if any(w in m for w in ["fertil","urea","khad","urvar","dap","npk","manure","compost","nutrient","zinc","potash"]):
         return make_demo_response(req, "fertil")
-    if any(w in m for w in ["pest","insect","bug","कीट","कीड़","disease","रोग","spray","fungus","worm"]):
+    if any(w in m for w in ["pest","insect","bug","keet","disease","rog","spray","fungus","worm","aphid","rust","blight"]):
         return make_demo_response(req, "pest")
-    if any(w in m for w in ["price","market","sell","भाव","मंडी","rate","msp","profit","income"]):
+    if any(w in m for w in ["price","market","sell","bhav","mandi","rate","msp","profit","bech","bikri"]):
         return make_demo_response(req, "market")
-    if any(w in m for w in ["sow","season","when","बुवाई","मौसम","calendar","plant","variety","किस्म"]):
+    if any(w in m for w in ["sow","season","calendar","plant","variety","beej","seed","buvai","mausam","ropai","time to plant"]):
         return make_demo_response(req, "season")
-    return make_demo_response(req, "default")
+    if any(w in m for w in ["soil","mitti","ph","organic","health","test"]):
+        return make_demo_response(req, "fertil")
+
+    # 11. Context from history
+    if req.history:
+        for h in reversed(req.history[-3:]):
+            c = h.get("content","").lower()
+            if any(w in c for w in ["irrigat","water","sinchai"]): return make_demo_response(req, "irrigat")
+            if any(w in c for w in ["fertil","urea","khad","npk"]): return make_demo_response(req, "fertil")
+            if any(w in c for w in ["pest","disease","keet","rog"]): return make_demo_response(req, "pest")
+            if any(w in c for w in ["price","market","bhav","mandi"]): return make_demo_response(req, "market")
+
+    # 12. Smart fallback
+    if is_hi:
+        return (
+            f"Samajh nahi aaya: \"{msg_orig}\"\n\n"
+            f"{crop} fasal ({state}) ke liye meri madad:\n\n"
+            f"• Sinchai - \"When to irrigate?\"\n"
+            f"• Khad - \"Best fertilizer for {crop}?\"\n"
+            f"• Keet - \"Pest control tips\"\n"
+            f"• Bazar - \"Market price today?\"\n"
+            f"• Buvai - \"Sowing season?\"\n"
+            f"• Upaj - \"Expected yield?\"\n\n"
+            f"Ya upar quick prompt buttons try karen!"
+        )
+    return (
+        f"I'm not sure about \"{msg_orig}\".\n\n"
+        f"For your **{crop}** crop in {state}, I can help with:\n\n"
+        f"• **Irrigation** - \"When to irrigate?\"\n"
+        f"• **Fertilizer** - \"Best fertilizer for {crop}?\"\n"
+        f"• **Pest control** - \"Pest control tips\"\n"
+        f"• **Market** - \"Market price today?\"\n"
+        f"• **Sowing** - \"Sowing season?\"\n"
+        f"• **Yield** - \"Expected yield?\"\n\n"
+        f"Or try the quick prompt buttons above!"
+    )
+
 
 # ── Routes ─────────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
@@ -288,23 +594,66 @@ async def get_states():
 @app.get("/api/weather/{state}")
 async def get_weather(state: str, city: str = ""):
     state = state.upper()
-    demo = WEATHER_DATA.get(state, DEFAULT_WEATHER)
-    query_city = city or ALL_STATES.get(state, {}).get("city", "Bhopal")
+    # Get state-specific demo data (all 30 states covered)
+    demo = WEATHER_DATA.get(state, DEFAULT_WEATHER).copy()
+    state_info = ALL_STATES.get(state, {"name": state, "city": "India"})
+    # Use user-provided city, else state capital
+    query_city = city.strip() or state_info.get("city", "Bhopal")
+    demo["city"] = query_city
+    demo["state_name"] = state_info.get("name", state)
+
+    # Try live weather if API key available
     if WEATHER_KEY:
         try:
-            async with httpx.AsyncClient(timeout=5.0) as c:
-                r = await c.get("https://api.openweathermap.org/data/2.5/weather",
-                    params={"q": f"{query_city},IN", "appid": WEATHER_KEY, "units": "metric"})
+            async with httpx.AsyncClient(timeout=6.0) as c:
+                r = await c.get(
+                    "https://api.openweathermap.org/data/2.5/weather",
+                    params={"q": f"{query_city},IN", "appid": WEATHER_KEY, "units": "metric"}
+                )
                 if r.status_code == 200:
                     d = r.json()
-                    return {**demo, "temp": round(d["main"]["temp"]),
-                            "feels": round(d["main"]["feels_like"]),
-                            "desc": d["weather"][0]["description"].title(),
-                            "humidity": d["main"]["humidity"],
-                            "wind": round(d["wind"]["speed"] * 3.6),
-                            "city": query_city, "source": "live"}
-        except: pass
-    return {**demo, "city": query_city, "source": "demo"}
+                    desc = d["weather"][0]["description"].title()
+                    # Map to weather icons
+                    wid = d["weather"][0]["id"]
+                    if wid < 300:   icon = "⛈️"
+                    elif wid < 400: icon = "🌧️"
+                    elif wid < 600: icon = "🌧️"
+                    elif wid < 700: icon = "🌨️"
+                    elif wid < 800: icon = "🌫️"
+                    elif wid == 800: icon = "☀️"
+                    elif wid <= 802: icon = "⛅"
+                    else: icon = "☁️"
+                    demo.update({
+                        "temp": round(d["main"]["temp"]),
+                        "feels": round(d["main"]["feels_like"]),
+                        "desc": desc,
+                        "humidity": d["main"]["humidity"],
+                        "wind": round(d["wind"]["speed"] * 3.6),
+                        "rain": d.get("clouds", {}).get("all", demo.get("rain", 10)),
+                        "icon": icon,
+                        "source": "live",
+                        "city": d.get("name", query_city),
+                    })
+                    return demo
+                elif r.status_code == 404:
+                    # City not found — try state capital
+                    capital = state_info.get("city", "Delhi")
+                    r2 = await c.get(
+                        "https://api.openweathermap.org/data/2.5/weather",
+                        params={"q": f"{capital},IN", "appid": WEATHER_KEY, "units": "metric"}
+                    )
+                    if r2.status_code == 200:
+                        d2 = r2.json()
+                        demo.update({"temp": round(d2["main"]["temp"]), "feels": round(d2["main"]["feels_like"]),
+                                     "desc": d2["weather"][0]["description"].title(),
+                                     "humidity": d2["main"]["humidity"], "wind": round(d2["wind"]["speed"]*3.6),
+                                     "source": "live", "city": capital, "note": f"City '{query_city}' not found, showing {capital}"})
+                        return demo
+        except Exception as e:
+            pass  # Fall back to demo data
+
+    demo["source"] = "demo"
+    return demo
 
 @app.get("/api/market")
 async def get_market():

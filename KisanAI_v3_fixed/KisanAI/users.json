@@ -5,7 +5,7 @@
       "mobile": "6350558179",
       "password": "3a7ba8d201c367655713422d1326db6cefdf6b624d2ac8dea6c8df7567a1850c",
       "state": "MP",
-      "crop": "soybean",
+      "crop": "rice",
       "soil": "black",
       "land": 2.5,
       "joined": "19 Mar 2026",
@@ -24,14 +24,72 @@
           "q": "hello",
           "a": "\ud83c\udf3e **Advisory for your Soybean farm \u2014 Madhya Pradesh**\n\n**Your profile:** Black soil \u00b7 2.5 acres \u00b7 Bhopal\n\n**This week's priorities:**\n\u2705 Check soil moisture \u2014 irrigate if <50% capacity\n\u2705 Weekly pest scouting (5 plants/100m row)\n\u2705 Monitor weather \u2014 spray window check\n\n**Expected yield:** 12\u201313 q/acre\n",
           "time": "19 Mar 15:18"
+        },
+        {
+          "q": "hello",
+          "a": "\ud83c\udf3e **Advisory for your Soybean farm \u2014 Madhya Pradesh**\n\n**Your profile:** Black soil \u00b7 2.5 acres \u00b7 Bhopal\n\n**This week's priorities:**\n\u2705 Check soil moisture \u2014 irrigate if <50% capacity\n\u2705 Weekly pest scouting (5 plants/100m row)\n\u2705 Monitor weather \u2014 spray window check\n\n**Expected yield:** 12\u201313 q/acre\n",
+          "time": "19 Mar 16:16"
+        },
+        {
+          "q": "hello",
+          "a": "\ud83d\udc4b Hello! I'm KisanAI \u2014 your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Soybean**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black**\n\nHow can I help you today? You can ask me about:\n\u2022 \ud83d\udca7 When to irrigate?\n\u2022 \ud83c\udf31 Best fertilizer for your crop?\n\u2022 \ud83d\udc1b Pest control tips?\n\u2022 \ud83d\udcc8 Today's market price?",
+          "time": "19 Mar 16:22"
+        },
+        {
+          "q": "how are you",
+          "a": "\ud83d\ude0a I'm doing great, thank you for asking! Always ready to help with your farm.\n\nHow is your **Soybean** crop doing? Any issues I can help with? \ud83c\udf3e",
+          "time": "19 Mar 16:22"
+        },
+        {
+          "q": "who made you",
+          "a": "\ud83c\udf3e **KisanAI** is an AI-powered agricultural advisory platform built to help India's small and marginal farmers.\n\n**Technology Stack:**\n\u2022 Backend: FastAPI (Python)\n\u2022 AI: OpenAI GPT-4\n\u2022 30 States \u00b7 50+ Crops \u00b7 Hindi + English\n\n\ud83c\udfc6 PS3 Hackathon 2026 Submission",
+          "time": "19 Mar 16:22"
+        },
+        {
+          "q": "who are you",
+          "a": "\ud83c\udf3e **I'm KisanAI \u2014 your intelligent farming advisor!**\n\nHere's what I can do:\n\n\ud83d\udcac **Chat** \u2014 Ask anything about any crop\n\ud83d\udd2c **Pest AI** \u2014 Upload photo to identify pests & diseases\n\ud83d\udcc8 **Market** \u2014 Live mandi prices for 12+ crops\n\ud83c\udf31 **Planner** \u2014 Sowing calendar & yield estimates\n\ud83e\uddea **Soil Lab** \u2014 NPK recom",
+          "time": "19 Mar 16:23"
+        },
+        {
+          "q": "hello",
+          "a": "\ud83d\udc4b Hello! I'm KisanAI \u2014 your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Soybean**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black**\n\nHow can I help you today? You can ask me about:\n\u2022 \ud83d\udca7 When to irrigate?\n\u2022 \ud83c\udf31 Best fertilizer for your crop?\n\u2022 \ud83d\udc1b Pest control tips?\n\u2022 \ud83d\udcc8 Today's market price?",
+          "time": "19 Mar 16:23"
+        },
+        {
+          "q": "i have changed crop soyabean to wheat",
+          "a": "\ud83e\udd14 I see you asked: \"i have changed crop soyabean to wheat\"\n\nI can help you with your **Soybean** crop in Madhya Pradesh on these topics:\n\n\u2022 \ud83d\udca7 **Irrigation** \u2014 when and how much to water\n\u2022 \ud83c\udf31 **Fertilizer** \u2014 NPK schedule and dosage\n\u2022 \ud83d\udc1b **Pests & Diseases** \u2014 identification and treatment\n\u2022 \ud83d\udcc8 **Market ",
+          "time": "19 Mar 16:24"
+        },
+        {
+          "q": "hellol",
+          "a": "Hello! I'm KisanAI - your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Soybean**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black** - 2.5 acres\n\nHow can I help you today?\n\u2022 When to irrigate?\n\u2022 Best fertilizer for Soybean?\n\u2022 Pest & disease control?\n\u2022 Today's market price?",
+          "time": "19 Mar 16:36"
+        },
+        {
+          "q": "hello",
+          "a": "Hello! I'm KisanAI - your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Wheat**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black** - 2.5 acres\n\nHow can I help you today?\n\u2022 When to irrigate?\n\u2022 Best fertilizer for Wheat?\n\u2022 Pest & disease control?\n\u2022 Today's market price?",
+          "time": "19 Mar 16:36"
+        },
+        {
+          "q": "Best fertilizer?",
+          "a": "\ud83c\udf31 **Fertilizer Schedule \u2014 Wheat (Madhya Pradesh, Black soil)**\n\n| Nutrient | Dose/acre | When |\n|---|---|---|\n| N (Urea) | 40 kg \u00d7 3 | Basal + 21 + 42 DAS |\n| P (DAP) | 30 kg | Basal |\n| K (MOP) | 40 kg | Basal |\n| Zinc Sulphate | 5 kg | Once/season |\n\n\ud83d\udcb0 Est. cost: \u20b94420/acre",
+          "time": "19 Mar 16:37"
+        },
+        {
+          "q": "hello",
+          "a": "Hello! I'm KisanAI - your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Rice**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black** - 2.5 acres\n\nHow can I help you today?\n\u2022 When to irrigate?\n\u2022 Best fertilizer for Rice?\n\u2022 Pest & disease control?\n\u2022 Today's market price?",
+          "time": "19 Mar 16:52"
         }
       ],
       "badges": [
-        "\ud83c\udf31 New Farmer"
+        "\ud83c\udf31 New Farmer",
+        "\ud83c\udf3e Active Farmer"
       ]
     }
   },
   "sessions": {
-    "d3a7eca7828094d59ba857d27f9ebcd6ea862d01c44c027da0c5a72f7b509bd3": "6350558179"
+    "d3a7eca7828094d59ba857d27f9ebcd6ea862d01c44c027da0c5a72f7b509bd3": "6350558179",
+    "b32a1162da6eff9a95d01f3714e1fdf5beace9a9b73952e295ad9431fe84f04f": "6350558179",
+    "e8bd1e851c1651b1dff2cd6d697ba1012382579f1fa18155f9bcec171c3f6aba": "6350558179"
   }
 }
