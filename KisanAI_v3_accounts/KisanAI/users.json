@@ -1,0 +1,58 @@
+{
+  "users": {
+    "1234567895": {
+      "name": "Pavan",
+      "mobile": "1234567895",
+      "password": "b59b7aa037a6f8b4820853be05dfc679da120f676083dfd9d9015eaf0632ad5b",
+      "state": "MP",
+      "crop": "wheat",
+      "soil": "black",
+      "land": 2.5,
+      "joined": "19 Mar 2026",
+      "chats": [
+        {
+          "q": "hello",
+          "a": "\ud83c\udf3e **Personalised Farm Advisory**\n\nBased on your profile (Wheat, Black soil, MP, 2.5 acres):\n\n**This week's priorities:**\n\u2705 Check soil moisture \u2014 irrigate if below 50% field capacity\n\u2705 Scout for aphids \u2014 5 plants/metre check\n\u2705 Monitor weather \u2014 spray window open today\n\n**Quick stats for your farm:**\n",
+          "time": "19 Mar 14:52"
+        }
+      ],
+      "badges": [
+        "\ud83c\udf31 New Farmer"
+      ]
+    },
+    "8319708400": {
+      "name": "Radhe",
+      "mobile": "8319708400",
+      "password": "26e7de4ddc8bad4deb5c2852532d8057e13919120cd0d229fc7970ebab5c5401",
+      "state": "MP",
+      "crop": "wheat",
+      "soil": "black",
+      "land": 2.5,
+      "joined": "19 Mar 2026",
+      "chats": [
+        {
+          "q": "Pest control tips",
+          "a": "\ud83d\udc1b **Integrated Pest Management Guide**\n\n**Season-specific threats for Wheat in MP:**\n\n**\ud83d\udd34 High Alert:**\n\u2022 **Aphids (Maahu):** Spray Imidacloprid 17.8 SL @ 0.5ml/L\n\u2022 **Yellow Rust:** Propiconazole @ 1ml/L at first sign\n\n**\ud83d\udfe1 Monitor:**\n\u2022 **Termites:** Chlorpyrifos in irrigation water\n\u2022 **Rodents:** Zi",
+          "time": "19 Mar 15:02"
+        },
+        {
+          "q": "Sowing season?",
+          "a": "\ud83d\udcc5 **Complete Sowing Calendar (MP)**\n\n**Rabi Season (Oct\u2013Mar):**\n| Crop | Sow | Harvest | Duration |\n|---|---|---|---|\n| Wheat | Oct 15\u2013Nov 30 | Mar\u2013Apr | 120\u2013150 days |\n| Mustard | Oct 1\u201331 | Feb\u2013Mar | 110\u2013140 days |\n| Gram | Oct 15\u2013Nov 15 | Feb\u2013Mar | 90\u2013110 days |\n\n**Kharif Season (Jun\u2013Oct):**\n| Cr",
+          "time": "19 Mar 15:02"
+        },
+        {
+          "q": "Market price today?",
+          "a": "\ud83d\udcc8 **Market Intelligence Report**\n\n**Wheat prices (Today):**\n\u2022 MSP: \u20b92,275/quintal\n\u2022 Bhopal Mandi: \u20b92,340 \u2191 (+\u20b965 above MSP)\n\u2022 Indore Mandi: \u20b92,310 \u2191\n\u2022 Ujjain Mandi: \u20b92,290 \u2192\n\n**Price forecast (next 30 days):** \ud83d\udcc8 Bullish\nPost-harvest demand expected to push prices 3\u20135% higher\n\n**Best selling strategy",
+          "time": "19 Mar 15:02"
+        }
+      ],
+      "badges": [
+        "\ud83c\udf31 New Farmer"
+      ]
+    }
+  },
+  "sessions": {
+    "30297e353aa22a33ff43f2eb3d5cff4f438ec9602cbc4e396bf79574f634e790": "1234567895",
+    "c9a3255465cbeb04a419d02b107e2f0978c8a7f3af7c4a06ee794ed90eddacfe": "8319708400"
+  }
+}

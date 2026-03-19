@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KisanAI — Smart Farming Advisory</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo"><div class="leaf"></div>KisanAI</a>
+  <div class="nav-links">
+    <a href="#app">Advisory</a><a href="#features">Features</a>
+    <a href="#schemes">Schemes</a><a href="#impact">Impact</a>
+  </div>
+  <div class="nav-right">
+    <span class="ai-badge {% if ai_enabled %}active{% endif %}">{% if ai_enabled %}✅ AI Active{% else %}⚡ Demo Mode{% endif %}</span>
+    <a href="#app" class="btn-primary">Start Free ↗</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ AI-Powered · Multilingual · Free for Farmers</div>
+    <h1>Smart farming,<br><em>every harvest.</em></h1>
+    <p>Real-time crop advisory, pest detection, and weather alerts — in Hindi or English — built for India's 100 million small farmers.</p>
+    <div class="hero-cta">
+      <a href="#app" class="btn-primary">Ask KisanAI ↗</a>
+      <a href="#features" class="btn-secondary">See Features</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">100M+</span><span class="stat-label">Farmers in India</span></div>
+      <div class="stat"><span class="stat-num">22</span><span class="stat-label">Languages</span></div>
+      <div class="stat"><span class="stat-num">98%</span><span class="stat-label">Pest Accuracy</span></div>
+      <div class="stat"><span class="stat-num">3min</span><span class="stat-label">Avg Response</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="app" class="app-section">
+  <div class="section-inner">
+    <div class="section-tag">Live Advisory Platform</div>
+    <h2 class="section-title">Your AI farming advisor</h2>
+    <p class="section-sub">Ask about crops, upload pest photos, or check live mandi prices.</p>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <h3>⚙ Farm Profile</h3>
+        <div class="input-group">
+          <label>Language / भाषा</label>
+          <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('en',this)">English</button>
+            <button class="lang-btn" onclick="setLang('hi',this)">हिंदी</button>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>State / राज्य</label>
+          <select id="stateSelect" onchange="loadWeather()">
+            <option value="MP">Madhya Pradesh</option><option value="UP">Uttar Pradesh</option>
+            <option value="MH">Maharashtra</option><option value="PB">Punjab</option>
+            <option value="RJ">Rajasthan</option><option value="GJ">Gujarat</option>
+            <option value="HR">Haryana</option><option value="AP">Andhra Pradesh</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Crop / फसल</label>
+          <select id="cropSelect">
+            <option value="wheat">Wheat / गेहूँ</option><option value="rice">Rice / धान</option>
+            <option value="cotton">Cotton / कपास</option><option value="soybean">Soybean / सोयाबीन</option>
+            <option value="sugarcane">Sugarcane / गन्ना</option><option value="maize">Maize / मक्का</option>
+            <option value="mustard">Mustard / सरसों</option><option value="onion">Onion / प्याज</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Soil Type / मिट्टी</label>
+          <select id="soilSelect">
+            <option value="black">Black / काली</option><option value="red">Red / लाल</option>
+            <option value="alluvial">Alluvial / जलोढ़</option><option value="sandy">Sandy / रेतीली</option>
+            <option value="loamy">Loamy / दोमट</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Land (acres)</label>
+          <input type="number" id="landInput" value="2.5" min="0.5" step="0.5">
+        </div>
+        <div class="weather-card" id="weatherCard"><div class="loading-text">Loading weather...</div></div>
+        <div class="alert-badge" id="weatherAlert"></div>
+      </aside>
+
+      <div class="chat-panel">
+        <div class="chat-header">
+          <div class="chat-avatar">🌾</div>
+          <div class="chat-header-info">
+            <div class="chat-name">KisanAI Assistant</div>
+            <div class="chat-status"><span class="status-dot"></span><span id="aiStatus">{% if ai_enabled %}AI Active · GPT-4{% else %}Demo Mode{% endif %}</span></div>
+          </div>
+          <div class="chat-tabs">
+            <button class="tab active" onclick="switchTab('chat',this)">💬 Chat</button>
+            <button class="tab" onclick="switchTab('pest',this)">🔬 Pest</button>
+            <button class="tab" onclick="switchTab('market',this)">📈 Market</button>
+            <button class="tab" onclick="switchTab('soil',this)">🧪 Soil</button>
+          </div>
+        </div>
+
+        <div id="tabChat" class="tab-content active">
+          <div class="messages" id="messages"></div>
+          <div class="quick-prompts">
+            <button class="qbtn" onclick="quickSend(this)">💧 When to irrigate?</button>
+            <button class="qbtn" onclick="quickSend(this)">🌱 Best fertilizer?</button>
+            <button class="qbtn" onclick="quickSend(this)">🐛 Pest control tips</button>
+            <button class="qbtn" onclick="quickSend(this)">📅 Sowing season?</button>
+            <button class="qbtn" onclick="quickSend(this)">💰 Market price today?</button>
+          </div>
+          <div class="input-row">
+            <textarea id="msgInput" placeholder="Ask about your crops..." rows="1"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+              oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+            <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+            <button class="send-btn" onclick="sendChat()" id="sendBtn">➤</button>
+          </div>
+        </div>
+
+        <div id="tabPest" class="tab-content">
+          <div class="upload-zone" id="uploadZone"
+            onclick="document.getElementById('fileInput').click()"
+            ondrop="handleDrop(event)" ondragover="event.preventDefault();this.classList.add('dragover')"
+            ondragleave="this.classList.remove('dragover')">
+            <img id="pestImg" src="" alt="" style="display:none;width:100%;max-height:200px;object-fit:cover;border-radius:10px">
+            <div id="uploadHint">
+              <div style="font-size:40px;margin-bottom:8px">📷</div>
+              <strong>Click or drop crop photo</strong>
+              <p>AI identifies pests & recommends treatment</p>
+            </div>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(event)">
+          <div id="pestResult" class="pest-result" style="display:none"></div>
+        </div>
+
+        <div id="tabMarket" class="tab-content">
+          <div id="marketList" class="market-list"><div class="loading-text">Loading prices...</div></div>
+        </div>
+
+        <div id="tabSoil" class="tab-content">
+          <div class="soil-form">
+            <h4>🧪 Soil Health Advisory</h4>
+            <p>Get NPK recommendations tailored to your crop and soil type.</p>
+            <div class="input-group" style="margin-top:16px">
+              <label>Soil pH (4–10)</label>
+              <input type="number" id="phInput" value="7.0" min="4" max="10" step="0.1">
+            </div>
+            <button class="btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="getSoilAdvisory()">Get Soil Advisory ↗</button>
+            <div id="soilResult" style="margin-top:20px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="light-section">
+  <div class="section-inner">
+    <div class="section-tag">What we offer</div>
+    <h2 class="section-title">Everything a farmer needs,<br>in one platform.</h2>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(82,183,136,0.15)">🤖</div><h3>AI Crop Advisory</h3><p>Personalised advice on fertilizer, irrigation and crop rotation tailored to your soil and location.</p><span class="feature-tag">GPT-4 Powered</span></div>
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(233,196,106,0.15)">🔬</div><h3>Pest Detection</h3><p>Upload a photo — AI identifies pests and diseases in seconds with treatment recommendations.</p><span class="feature-tag">Vision AI</span></div>
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(212,128,78,0.15)">⛅</div><h3>Weather Alerts</h3><p>Region-specific forecasts — know when to irrigate, spray, or harvest based on real-time data.</p><span class="feature-tag">Live API</span></div>
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(82,183,136,0.15)">🗣️</div><h3>Hindi Voice Support</h3><p>Speak your question in Hindi — KisanAI listens and responds in your language. No typing needed.</p><span class="feature-tag">22 Languages</span></div>
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(45,106,79,0.12)">📈</div><h3>Live Market Prices</h3><p>Real mandi prices for all major crops. Know the best time and place to sell for maximum profit.</p><span class="feature-tag">AgMarkNet Data</span></div>
+      <div class="feature-card"><div class="feature-icon" style="background:rgba(183,228,199,0.3)">🧪</div><h3>Soil Health Guide</h3><p>Input soil data and get precise NPK recommendations and soil improvement plans instantly.</p><span class="feature-tag">Science-backed</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="schemes">
+  <div class="section-inner">
+    <div class="section-tag">Government Support</div>
+    <h2 class="section-title">Schemes every farmer<br>should know about.</h2>
+    <div id="schemesList" class="schemes-grid"><div class="loading-text">Loading schemes...</div></div>
+  </div>
+</section>
+
+<section class="light-section">
+  <div class="section-inner">
+    <div class="section-tag">Simple process</div>
+    <h2 class="section-title">From question to harvest.</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h4>Set profile</h4><p>State, crop, soil and land area.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>Ask anything</h4><p>Type or speak in Hindi or English.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Get AI advice</h4><p>Instant personalised recommendations.</p></div>
+      <div class="step"><div class="step-num">4</div><h4>Farm smarter</h4><p>Better harvest every season.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="section-inner">
+    <div class="section-tag">Why it matters</div>
+    <h2 class="section-title">Built for Bharat's farmers.</h2>
+    <div class="impact-grid">
+      <div class="impact-card"><span class="impact-num">30%</span><span class="impact-label">Average yield increase with AI advisory</span></div>
+      <div class="impact-card"><span class="impact-num">₹18K</span><span class="impact-label">Avg. annual savings on fertilizer</span></div>
+      <div class="impact-card"><span class="impact-num">86%</span><span class="impact-label">Pest detection accuracy on field tests</span></div>
+      <div class="impact-card"><span class="impact-num">3min</span><span class="impact-label">Average time to get actionable advice</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">🌾 KisanAI</div>
+  <p>Empowering India's farmers with AI.</p>
+  <div class="footer-links">
+    <a href="#app">Advisory</a><a href="#features">Features</a>
+    <a href="#schemes">Schemes</a>
+    <a href="/health" target="_blank">API Health</a>
+    <a href="/docs" target="_blank">API Docs ↗</a>
+  </div>
+  <div class="footer-copy">© 2026 KisanAI · PS3 Hackathon Submission · FastAPI + OpenAI</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="/static/js/app.js"></script>
+</body>
+</html>

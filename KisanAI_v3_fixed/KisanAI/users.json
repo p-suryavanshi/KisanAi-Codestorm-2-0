@@ -1,0 +1,37 @@
+{
+  "users": {
+    "6350558179": {
+      "name": "Pavan",
+      "mobile": "6350558179",
+      "password": "3a7ba8d201c367655713422d1326db6cefdf6b624d2ac8dea6c8df7567a1850c",
+      "state": "MP",
+      "crop": "soybean",
+      "soil": "black",
+      "land": 2.5,
+      "joined": "19 Mar 2026",
+      "chats": [
+        {
+          "q": "When to irrigate?",
+          "a": "\ud83d\udca7 **Irrigation Guide \u2014 Soybean (2.5 acres, Madhya Pradesh)**\n\n\u2022 Irrigate every **5-6 days** at current stage\n\u2022 Water per irrigation: 5 cm on Black soil\n\u2022 Total for your farm: 12.5 cm\n\u2022 Best time: Early morning (saves 30% water)\n\u2022 Seasonal total: 450 mm\n\n\u26a0\ufe0f Monitor soil moisture before each irrigatio",
+          "time": "19 Mar 15:18"
+        },
+        {
+          "q": "When to irrigate?",
+          "a": "\ud83d\udca7 **Irrigation Guide \u2014 Soybean (2.5 acres, Madhya Pradesh)**\n\n\u2022 Irrigate every **5-6 days** at current stage\n\u2022 Water per irrigation: 5 cm on Black soil\n\u2022 Total for your farm: 12.5 cm\n\u2022 Best time: Early morning (saves 30% water)\n\u2022 Seasonal total: 450 mm\n\n\u26a0\ufe0f Monitor soil moisture before each irrigatio",
+          "time": "19 Mar 15:18"
+        },
+        {
+          "q": "hello",
+          "a": "\ud83c\udf3e **Advisory for your Soybean farm \u2014 Madhya Pradesh**\n\n**Your profile:** Black soil \u00b7 2.5 acres \u00b7 Bhopal\n\n**This week's priorities:**\n\u2705 Check soil moisture \u2014 irrigate if <50% capacity\n\u2705 Weekly pest scouting (5 plants/100m row)\n\u2705 Monitor weather \u2014 spray window check\n\n**Expected yield:** 12\u201313 q/acre\n",
+          "time": "19 Mar 15:18"
+        }
+      ],
+      "badges": [
+        "\ud83c\udf31 New Farmer"
+      ]
+    }
+  },
+  "sessions": {
+    "d3a7eca7828094d59ba857d27f9ebcd6ea862d01c44c027da0c5a72f7b509bd3": "6350558179"
+  }
+}

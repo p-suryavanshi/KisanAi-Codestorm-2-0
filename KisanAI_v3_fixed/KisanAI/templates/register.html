@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Register — KisanAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--g2:#1a3a2a;--g3:#2d6a4f;--g4:#52b788;--g5:#b7e4c7;--cr:#faf8f2;--mu:#6b8c77;--br:rgba(45,106,79,0.15);--fd:'Playfair Display',serif;--fb:'DM Sans',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fb);background:var(--cr);min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.left{background:var(--g2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;position:relative;overflow:hidden}
+.left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 100%,rgba(82,183,136,.2) 0%,transparent 70%)}
+.left-logo{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--cr);margin-bottom:40px;position:relative}
+.left-tagline{font-family:var(--fd);font-size:clamp(30px,4vw,48px);font-weight:900;color:var(--cr);line-height:1.1;margin-bottom:20px;position:relative}
+.left-tagline em{font-style:italic;color:var(--g5)}
+.left-sub{font-size:15px;color:rgba(250,248,242,.5);line-height:1.7;max-width:360px;position:relative}
+.steps{display:flex;flex-direction:column;gap:16px;margin-top:36px;position:relative}
+.step-r{display:flex;align-items:flex-start;gap:12px}
+.step-num{width:28px;height:28px;background:rgba(82,183,136,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--g5);flex-shrink:0;margin-top:1px}
+.step-text strong{display:block;font-size:14px;font-weight:600;color:var(--cr);margin-bottom:2px}
+.step-text span{font-size:12px;color:rgba(250,248,242,.45)}
+.right{display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto}
+.form-box{width:100%;max-width:420px}
+.form-box h2{font-family:var(--fd);font-size:30px;font-weight:700;color:var(--g2);margin-bottom:6px}
+.form-box p{font-size:14px;color:var(--mu);margin-bottom:28px}
+.fgroup{margin-bottom:16px}
+.fgroup label{display:block;font-size:13px;font-weight:500;color:var(--g2);margin-bottom:6px}
+.fgroup input,.fgroup select{width:100%;padding:12px 16px;border:1.5px solid var(--br);border-radius:10px;font-family:var(--fb);font-size:14px;color:var(--g2);background:#fff;outline:none;transition:border .2s;-webkit-appearance:none}
+.fgroup input:focus,.fgroup select:focus{border-color:var(--g3)}
+.fgroup input::placeholder{color:#aaa}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err-msg{font-size:12px;color:#c0392b;margin-top:4px;display:none}
+.submit-btn{width:100%;padding:13px;background:var(--g2);color:var(--cr);font-family:var(--fb);font-size:15px;font-weight:600;border:none;border-radius:10px;cursor:pointer;transition:all .2s;margin-top:6px}
+.submit-btn:hover{background:var(--g3)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.terms{font-size:12px;color:var(--mu);text-align:center;margin-top:14px;line-height:1.6}
+.alt-link{text-align:center;font-size:14px;color:var(--mu);margin-top:16px}
+.alt-link a{color:var(--g3);font-weight:600;text-decoration:none}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--g2);color:var(--cr);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;border:1px solid rgba(82,183,136,.3);transform:translateY(60px);opacity:0;transition:all .3s;max-width:280px}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:768px){body{grid-template-columns:1fr}.left{display:none}}
+</style>
+</head>
+<body>
+<div class="left">
+  <div class="left-logo">🌾 KisanAI</div>
+  <h1 class="left-tagline">Join 100 million<br><em>smart farmers.</em></h1>
+  <p class="left-sub">Create your free account and get personalized AI advice tailored to your farm.</p>
+  <div class="steps">
+    <div class="step-r"><div class="step-num">1</div><div class="step-text"><strong>Create your profile</strong><span>Add your farm details once</span></div></div>
+    <div class="step-r"><div class="step-num">2</div><div class="step-text"><strong>Get personalised advice</strong><span>AI knows your crop, soil and location</span></div></div>
+    <div class="step-r"><div class="step-num">3</div><div class="step-text"><strong>Save your history</strong><span>Access past Q&A and recommendations</span></div></div>
+    <div class="step-r"><div class="step-num">4</div><div class="step-text"><strong>Earn farmer badges</strong><span>🌱 New Farmer → 🏆 KisanAI Expert</span></div></div>
+  </div>
+</div>
+<div class="right">
+  <div class="form-box">
+    <h2>Create free account</h2>
+    <p>Join KisanAI and farm smarter today</p>
+    <div class="fgroup">
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Your name">
+    </div>
+    <div class="fgroup">
+      <label>Mobile Number</label>
+      <input type="tel" id="mobile" placeholder="10-digit mobile number" maxlength="10">
+    </div>
+    <div class="grid-2">
+      <div class="fgroup">
+        <label>State</label>
+        <select id="state">
+          <option value="MP">Madhya Pradesh</option><option value="UP">Uttar Pradesh</option>
+          <option value="MH">Maharashtra</option><option value="PB">Punjab</option>
+          <option value="RJ">Rajasthan</option><option value="GJ">Gujarat</option>
+          <option value="HR">Haryana</option><option value="AP">Andhra Pradesh</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label>Main Crop</label>
+        <select id="crop">
+          <option value="wheat">Wheat / गेहूँ</option><option value="rice">Rice / धान</option>
+          <option value="cotton">Cotton / कपास</option><option value="soybean">Soybean / सोयाबीन</option>
+          <option value="maize">Maize / मक्का</option><option value="mustard">Mustard / सरसों</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Minimum 6 characters">
+      <div class="err-msg" id="passErr">Password must be at least 6 characters</div>
+    </div>
+    <div class="fgroup">
+      <label>Confirm Password</label>
+      <input type="password" id="confirm" placeholder="Re-enter password" onkeydown="if(event.key==='Enter')doRegister()">
+      <div class="err-msg" id="confirmErr">Passwords do not match</div>
+    </div>
+    <button class="submit-btn" id="regBtn" onclick="doRegister()">Create My Account →</button>
+    <p class="terms">By registering you agree to use KisanAI responsibly. Your data stays on your device.</p>
+    <div class="alt-link">Already have an account? <a href="/login">Login here</a></div>
+    <div class="alt-link" style="margin-top:8px"><a href="/">← Back to home</a></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+async function doRegister() {
+  const name = document.getElementById('name').value.trim();
+  const mobile = document.getElementById('mobile').value.trim();
+  const state = document.getElementById('state').value;
+  const crop = document.getElementById('crop').value;
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm').value;
+  if (!name || !mobile || !password) { showToast('⚠️ Please fill all fields'); return; }
+  if (password.length < 6) { document.getElementById('passErr').style.display='block'; return; }
+  document.getElementById('passErr').style.display='none';
+  if (password !== confirm) { document.getElementById('confirmErr').style.display='block'; return; }
+  document.getElementById('confirmErr').style.display='none';
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const r = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, mobile, password, state, crop }) });
+    const d = await r.json();
+    if (d.error) { showToast('❌ ' + d.error); btn.disabled=false; btn.textContent='Create My Account →'; return; }
+    showToast('🎉 Welcome to KisanAI, ' + d.name + '!');
+    setTimeout(() => window.location.href = d.redirect, 900);
+  } catch { showToast('⚠️ Connection error'); btn.disabled=false; btn.textContent='Create My Account →'; }
+}
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+</script>
+</body>
+</html>
