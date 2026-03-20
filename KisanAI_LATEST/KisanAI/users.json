@@ -1,0 +1,58 @@
+{
+  "users": {
+    "8319708400": {
+      "name": "Radhe",
+      "mobile": "8319708400",
+      "password": "26e7de4ddc8bad4deb5c2852532d8057e13919120cd0d229fc7970ebab5c5401",
+      "state": "MP",
+      "crop": "wheat",
+      "soil": "black",
+      "land": 2.5,
+      "joined": "20 Mar 2026",
+      "chats": [
+        {
+          "q": "hello",
+          "a": "Hello! I'm KisanAI - your AI farming advisor.\n\nYour profile is loaded:\n\u2022 Crop: **Wheat**\n\u2022 State: **Madhya Pradesh**\n\u2022 Soil: **Black** - 2.5 acres\n\nHow can I help you today?\n\u2022 When to irrigate?\n\u2022 Best fertilizer for Wheat?\n\u2022 Pest & disease control?\n\u2022 Today's market price?",
+          "time": "20 Mar 08:41"
+        },
+        {
+          "q": "who are you",
+          "a": "I'm KisanAI - your complete AI farming advisor!\n\nWhat I can do:\n\u2022 Answer questions about any crop\n\u2022 Identify pests from photos (Pest AI tab)\n\u2022 Live mandi prices (Market tab)\n\u2022 Sowing calendar + yield estimate (Planner tab)\n\u2022 NPK & soil health (Soil tab)\n\u2022 Precision irrigation calc (Water tab)\n\u2022 Agri",
+          "time": "20 Mar 08:41"
+        },
+        {
+          "q": "how are you",
+          "a": "I'm great, thanks for asking! How is your **Wheat** crop doing? Any issues I can help with?",
+          "time": "20 Mar 08:41"
+        }
+      ],
+      "badges": [
+        "\ud83c\udf31 New Farmer"
+      ]
+    },
+    "6350558179": {
+      "name": "Pavan",
+      "mobile": "6350558179",
+      "password": "3a7ba8d201c367655713422d1326db6cefdf6b624d2ac8dea6c8df7567a1850c",
+      "state": "MP",
+      "crop": "wheat",
+      "soil": "black",
+      "land": 2.5,
+      "joined": "20 Mar 2026",
+      "chats": [
+        {
+          "q": "Best fertilizer?",
+          "a": "\ud83c\udf31 **Fertilizer Schedule \u2014 Wheat (Madhya Pradesh, Black soil)**\n\n| Nutrient | Dose/acre | When |\n|---|---|---|\n| N (Urea) | 40 kg \u00d7 3 | Basal + 21 + 42 DAS |\n| P (DAP) | 30 kg | Basal |\n| K (MOP) | 40 kg | Basal |\n| Zinc Sulphate | 5 kg | Once/season |\n\n\ud83d\udcb0 Est. cost: \u20b94420/acre",
+          "time": "20 Mar 08:57"
+        }
+      ],
+      "badges": [
+        "\ud83c\udf31 New Farmer"
+      ]
+    }
+  },
+  "sessions": {
+    "7ce29b5f0d6df2c3eb38a6bae9ba6ec0e06e7cef6a2545ad71ae83aadf21019d": "8319708400",
+    "577673797fcd0591edf17d61475850eb4c864ca7a841e2fb31a56b2707fbce09": "6350558179"
+  }
+}
